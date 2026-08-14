@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Geophysical Survey — VISR</title>
+<meta name="description" content="VISR's geophysical survey services: our ground penetrating radar, magnetometer, and land survey equipment, our data processing workflow, and what we can detect.">
+<!-- CHROME:HEAD:START -->
+<link rel="preload" href="/assets/fonts/inter-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/newsreader-600.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/css/site.css">
+<script>
+document.documentElement.classList.remove('no-js');
+document.addEventListener('DOMContentLoaded', function () {
+  var toggle = document.querySelector('.nav-toggle');
+  var nav = document.querySelector('.site-nav');
+  if (!toggle || !nav) return;
+  toggle.addEventListener('click', function () {
+    var open = nav.getAttribute('data-open') === 'true';
+    nav.setAttribute('data-open', String(!open));
+    toggle.setAttribute('aria-expanded', String(!open));
+  });
+});
+</script>
+<!-- CHROME:HEAD:END -->
+</head>
+<body>
+<!-- CHROME:BOOT:START -->
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- CHROME:HEADER:START -->
+<header class="site-header">
+  <div class="wrap">
+    <a href="/"><img src="/assets/img/logo/visr-logo.png" alt="VISR — Vanderbilt Institute for Spatial Research" width="264" height="107"></a>
+    <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav class="site-nav" id="site-nav" aria-label="Primary">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/about/">About VISR</a></li>
+        <li><a href="/geophysical-survey/" aria-current="page">Geophysical Survey</a></li>
+        <li><a href="/geospatial-projects/">Geospatial Projects</a></li>
+        <li><a href="/augmented-reality/">Augmented Reality</a></li>
+        <li><a href="/trainings/">Trainings</a></li>
+        <li><a href="/news/">VISR in the News</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<!-- CHROME:HEADER:END -->
+
+<main id="main" tabindex="-1">
+<!-- CHROME:BOOT:END -->
+<section class="wrap">
+  <h1>Geophysical Survey</h1>
+  <div class="prose">
+    <p>VISR provides ground penetrating radar (GPR), magnetometry, and land survey services for research, cultural resource management, and utility location projects throughout Nashville, middle Tennessee, and beyond.</p>
+    <p>Our team pairs research-grade geophysical instruments with careful post-processing to produce clear, interpretable results, from an initial site visit through a finished report.</p>
+  </div>
+</section>
+
+<section class="wrap">
+  <picture>
+    <source srcset="/assets/img/inline/gpr-survey.webp" type="image/webp">
+    <img src="/assets/img/inline/gpr-survey.jpg" alt="Two VISR researchers with the GSSI UtilityScan ground penetrating radar unit in a grassy field" width="1200" height="998" class="img-band" loading="lazy">
+  </picture>
+</section>
+
+<section class="wrap">
+  <h2>Our equipment</h2>
+  <ul class="titled-list">
+    <li>
+      <h3>Ground Penetrating Radar</h3>
+      <p>We use a GSSI UtilityScan ground penetrating radar with a 350 MHz frequency antenna and depth penetration up to 10 meters. The unit is retrofitted with a Model 626 3-wheel cart for handling in grassy areas and uneven terrain, and equipped with a real-time kinematic GPS unit for simultaneous GPS and GPR collection.</p>
+    </li>
+    <li>
+      <h3>Fluxgate Magnetic Gradiometer</h3>
+      <p>We use a Bartington Grad601 Fluxgate Magnetic Gradiometer with dual sensors. The system offers selectable resolution of 0.01nT or 0.1nT with exceptional temperature stability, and automatically adjusts to reduce power line noise with 50/60 Hz rejection.</p>
+    </li>
+    <li>
+      <h3>Total Station &amp; RTK GNSS</h3>
+      <p>We use Total Stations and RTK GNSS to provide precise locations for marking points of interest, boundaries, and more in a land survey: a Nikon Total Station with two prisms, poles, and a tripod, and Emlid Reach RS and RS2 with poles and a tripod stand.</p>
+    </li>
+  </ul>
+</section>
+
+<section class="wrap">
+  <picture>
+    <source srcset="/assets/img/inline/gpr-cart.webp" type="image/webp">
+    <img src="/assets/img/inline/gpr-cart.jpg" alt="The GSSI UtilityScan GPR mounted on its Model 626 3-wheel cart, staged outdoors" width="540" height="720" class="img-portrait" loading="lazy">
+  </picture>
+</section>
+
+<section class="wrap">
+  <picture>
+    <source srcset="/assets/img/inline/gradiometer-survey.webp" type="image/webp">
+    <img src="/assets/img/inline/gradiometer-survey.jpg" alt="A VISR researcher carrying the Bartington Grad601 Fluxgate Magnetic Gradiometer frame across a survey field" width="1200" height="1600" class="img-portrait" loading="lazy">
+  </picture>
+</section>
+
+<section class="wrap">
+  <picture>
+    <source srcset="/assets/img/inline/fieldwork.webp" type="image/webp">
+    <img src="/assets/img/inline/fieldwork.jpg" alt="VISR researchers recording a point with an RTK GNSS rover pole in a Nashville field site, with the downtown skyline in the background" width="867" height="1156" class="img-portrait" loading="lazy">
+  </picture>
+</section>
+
+<section class="wrap">
+  <h2>Processing</h2>
+  <div class="prose">
+    <p>GPR post-processing is completed in Radan-7 and ArchaeoFusion, an open-source geophysical data processing software from the University of Arkansas, following four main steps:</p>
+  </div>
+  <ol>
+    <li>Time-zero correction, to adjust for surface reflection</li>
+    <li>Background removal, to reduce horizontal background noise</li>
+    <li>Filtering, to remove high and low-frequency noise</li>
+    <li>Migration, to reduce hyperbolic reflection</li>
+  </ol>
+  <div class="prose">
+    <p>Finished raster outputs are exported as time slices and geolocated in QGIS, with interpretations of anomalies digitized atop the rasters.</p>
+    <p>Magnetometry data is downloaded to TerraSurveyor for data cleaning as necessary to improve data interpretability — including spike removal, denoising, and de-striping — and grid combination. The data is then exported in a raster format to QGIS for geolocation and interpretation.</p>
+  </div>
+</section>
+
+<section class="wrap">
+  <h2>What we can detect</h2>
+  <h3>Ground Penetrating Radar</h3>
+  <ul>
+    <li>Grave shafts</li>
+    <li>Building footprints</li>
+    <li>Earthworks</li>
+    <li>Utility pipes</li>
+    <li>Geologic features</li>
+  </ul>
+  <h3>Fluxgate Magnetic Gradiometer</h3>
+  <ul>
+    <li>Grave shafts</li>
+    <li>Building footprints</li>
+    <li>Disturbed earth</li>
+    <li>Fire footprints</li>
+    <li>Unexploded ordnance</li>
+    <li>Pipe, cable, and drum locations</li>
+  </ul>
+</section>
+
+<section class="wrap">
+  <h2>Deliverables</h2>
+  <div class="prose">
+    <p>Each project produces a detailed report of findings, featuring background information on the site — including historical context and historical maps when accessible — information on the scope and methods of the project, a detailed table of the grid extents, maps of the survey grids and their GPR or magnetometer results, interpretations of the data, and recommendations for further action. We attribute all sources utilized and collaborate with local historians and experts to interpret our data.</p>
+  </div>
+</section>
+
+<section class="wrap">
+  <h2>Get in touch</h2>
+  <div class="prose">
+    <p>Contact Steven Wernke, VISR Director, at s.wernke[at]vanderbilt.edu to discuss a geophysical survey project.</p>
+    <p>Garland Hall, Room 323<br>
+    Vanderbilt University<br>
+    Nashville, TN 37203</p>
+  </div>
+</section>
+</main>
+
+<!-- CHROME:FOOTER:START -->
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="grid">
+      <div>
+        <h2>Contact</h2>
+        <p>Steven Wernke, VISR Director<br>
+        s.wernke[at]vanderbilt.edu</p>
+        <p>Garland Hall, Room 323<br>
+        Vanderbilt University<br>
+        Nashville, TN 37203</p>
+      </div>
+      <div>
+        <h2>Quick Links</h2>
+        <ul>
+          <li><a href="/about/">About VISR</a></li>
+          <li><a href="/services/">Our Services</a></li>
+          <li><a href="/team/">Meet the Team</a></li>
+          <li><a href="/trainings/">Trainings</a></li>
+          <li><a href="/news/">VISR in the News</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>Connect</h2>
+        <ul>
+          <li><a href="https://www.linkedin.com/company/vanderbilt-institute-for-spatial-research" rel="noopener">LinkedIn</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="colophon">© 2026 Vanderbilt University. VISR is a core research facility of Vanderbilt University.</p>
+  </div>
+</footer>
+<!-- CHROME:FOOTER:END -->
+
+</body>
+</html>

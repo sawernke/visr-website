@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PAGE_TITLE — VISR</title>
+<meta name="description" content="PAGE_DESC">
+<!-- CHROME:HEAD:START -->
+<link rel="preload" href="/assets/fonts/inter-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/newsreader-600.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/css/site.css">
+<script>
+document.documentElement.classList.remove('no-js');
+document.addEventListener('DOMContentLoaded', function () {
+  var toggle = document.querySelector('.nav-toggle');
+  var nav = document.querySelector('.site-nav');
+  if (!toggle || !nav) return;
+  toggle.addEventListener('click', function () {
+    var open = nav.getAttribute('data-open') === 'true';
+    nav.setAttribute('data-open', String(!open));
+    toggle.setAttribute('aria-expanded', String(!open));
+  });
+});
+</script>
+<!-- CHROME:HEAD:END -->
+</head>
+<body>
+<!-- CHROME:BOOT:START -->
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- CHROME:HEADER:START -->
+<header class="site-header">
+  <div class="wrap">
+    <a href="/"><img src="/assets/img/logo/visr-logo.png" alt="VISR — Vanderbilt Institute for Spatial Research" width="264" height="107"></a>
+    <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav class="site-nav" id="site-nav" aria-label="Primary">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/about/">About VISR</a></li>
+        <li><a href="/geophysical-survey/">Geophysical Survey</a></li>
+        <li><a href="/geospatial-projects/">Geospatial Projects</a></li>
+        <li><a href="/augmented-reality/">Augmented Reality</a></li>
+        <li><a href="/trainings/">Trainings</a></li>
+        <li><a href="/news/">VISR in the News</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<!-- CHROME:HEADER:END -->
+
+<main id="main" tabindex="-1">
+<!-- CHROME:BOOT:END -->
+  PAGE_CONTENT
+</main>
+
+<!-- CHROME:FOOTER:START -->
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="grid">
+      <div>
+        <h2>Contact</h2>
+        <p>Steven Wernke, VISR Director<br>
+        s.wernke[at]vanderbilt.edu</p>
+        <p>Garland Hall, Room 323<br>
+        Vanderbilt University<br>
+        Nashville, TN 37203</p>
+      </div>
+      <div>
+        <h2>Quick Links</h2>
+        <ul>
+          <li><a href="/about/">About VISR</a></li>
+          <li><a href="/services/">Our Services</a></li>
+          <li><a href="/team/">Meet the Team</a></li>
+          <li><a href="/trainings/">Trainings</a></li>
+          <li><a href="/news/">VISR in the News</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>Connect</h2>
+        <ul>
+          <li><a href="https://www.linkedin.com/company/vanderbilt-institute-for-spatial-research" rel="noopener">LinkedIn</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="colophon">© 2026 Vanderbilt University. VISR is a core research facility of Vanderbilt University.</p>
+  </div>
+</footer>
+<!-- CHROME:FOOTER:END -->
+
+</body>
+</html>

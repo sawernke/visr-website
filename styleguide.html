@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VISR Design System — Styleguide (dev only)</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="stylesheet" href="assets/css/site.css">
+<style>
+  /* Styleguide-only styles. Scoped to this dev page; not part of the
+     production system and not reused by any real page. */
+  .sg-banner { background: var(--ink); color: var(--bg);
+    padding: var(--s3) var(--s5); font-size: .8125rem; }
+  .sg-section { padding-block: var(--s7); }
+  .sg-section + .sg-section { border-top: 1px solid var(--rule); }
+  .sg-label { font-size: .75rem; font-weight: 600; text-transform: uppercase;
+    letter-spacing: .08em; color: var(--ink-muted); margin-bottom: var(--s4); }
+  .sg-swatches { display: grid; margin-top: var(--s6);
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: var(--s5); }
+  .sg-swatch { border: 1px solid var(--rule); }
+  .sg-swatch__fill { aspect-ratio: 1; }
+  .sg-swatch__meta { padding: var(--s3); font-size: .8125rem; }
+  .sg-swatch__meta code { display: block; margin-top: 2px;
+    color: var(--ink-muted); }
+  .sg-h1-demo { font-family: var(--font-display); font-weight: 600;
+    line-height: 1.15; letter-spacing: -0.01em;
+    font-size: clamp(2rem, 4vw, 3rem); margin: 0; }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#sg-content">Skip to component list</a>
+<header>
+  <p class="sg-banner">Development reference only — not part of the public
+    site, not linked from navigation, excluded from the build.</p>
+</header>
+
+<main class="wrap" id="sg-content" tabindex="-1">
+
+  <section class="sg-section">
+    <p class="eyebrow">VISR Design System</p>
+    <h1>Typography &amp; component styleguide</h1>
+    <p class="prose">This page renders each shared component once, in
+      isolation, so the visual system can be judged before any real content
+      lands on the site.</p>
+  </section>
+
+  <section class="sg-section">
+    <p class="sg-label">Type specimen</p>
+    <p class="sg-h1-demo">Heading level one, Newsreader 600</p>
+    <h2>Heading level two, Newsreader 600</h2>
+    <h3>Heading level three, Inter 600</h3>
+    <p class="prose">The Vanderbilt Institute for Spatial Research (VISR)
+      provides geospatial analysis and geophysical survey for diverse
+      projects within Vanderbilt and for diverse clients in Nashville,
+      middle Tennessee, and nationally. This paragraph checks measure, line
+      height, and body color set against the white background at normal
+      reading size.</p>
+  </section>
+
+  <section class="sg-section">
+    <p class="sg-label">Eyebrow &amp; arrow link</p>
+    <p class="eyebrow">Featured Project</p>
+    <p><a class="arrow-link" href="#">Read the full report</a></p>
+  </section>
+
+  <section class="sg-section">
+    <p class="sg-label">Hiring banner</p>
+    <div class="hiring">
+      <p><strong>Sample announcement headline.</strong> Placeholder copy
+        demonstrating the banner treatment used for time-sensitive notices;
+        not a live posting.</p>
+    </div>
+  </section>
+
+  <section class="sg-section">
+    <p class="sg-label">Services grid</p>
+    <div class="services__grid">
+      <div class="services__col">
+        <h3>Geophysical Survey</h3>
+        <ul>
+          <li>Ground-penetrating radar</li>
+          <li>Magnetometry</li>
+        </ul>
+        <a class="arrow-link" href="#">Learn more</a>
+      </div>
+      <div class="services__col">
+        <h3>Geospatial Projects</h3>
+        <ul>
+          <li>Aerial &amp; satellite mapping</li>
+          <li>GIS analysis</li>
+          <li>3D site modeling</li>
+        </ul>
+        <a class="arrow-link" href="#">Learn more</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="sg-section">
+    <p class="sg-label">Team grid</p>
+    <p class="prose">Portraits shown here are placeholder art, kept
+      deliberately generic so this reference page never pairs a real
+      colleague's photo with a placeholder name. Production headshots live
+      in <code>assets/img/portrait/</code>.</p>
+    <div class="team-grid">
+      <div class="team-card">
+        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iNTAwIiB2aWV3Qm94PSIwIDAgNDAwIDUwMCI+PHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSI1MDAiIGZpbGw9IiM1QjdDOTkiLz48Y2lyY2xlIGN4PSIyMDAiIGN5PSIxOTAiIHI9IjkwIiBmaWxsPSIjRENFNkVDIi8+PHBhdGggZD0iTTYwIDUwMCBRNjAgMzQwIDIwMCAzNDAgUTM0MCAzNDAgMzQwIDUwMCBaIiBmaWxsPSIjRENFNkVDIi8+PC9zdmc+"
+          alt="Placeholder portrait for team-card demo" width="400" height="500">
+        <h3>Placeholder Name</h3>
+        <p class="role">Placeholder Role</p>
+        <p>One or two lines of placeholder bio copy, to check spacing and
+          the muted color under a team card.</p>
+      </div>
+      <div class="team-card">
+        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iNTAwIiB2aWV3Qm94PSIwIDAgNDAwIDUwMCI+PHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSI1MDAiIGZpbGw9IiM1QjdDOTkiLz48Y2lyY2xlIGN4PSIyMDAiIGN5PSIxOTAiIHI9IjkwIiBmaWxsPSIjRENFNkVDIi8+PHBhdGggZD0iTTYwIDUwMCBRNjAgMzQwIDIwMCAzNDAgUTM0MCAzNDAgMzQwIDUwMCBaIiBmaWxsPSIjRENFNkVDIi8+PC9zdmc+"
+          alt="Placeholder portrait for team-card demo" width="400" height="500">
+        <h3>Second Placeholder</h3>
+        <p class="role">Placeholder Role</p>
+        <p>A second card so the grid's column behavior is visible at
+          different viewport widths.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sg-section">
+    <p class="sg-label">News grid</p>
+    <div class="news-grid">
+      <div class="news-item">
+        <img src="assets/img/news/edmondson.jpg"
+          alt="Styleguide sample photo" width="600" height="450">
+        <p class="outlet">Sample Outlet</p>
+        <h3>Headline demonstrating the news item heading treatment</h3>
+      </div>
+      <div class="news-item">
+        <img src="assets/img/news/mud-creek.jpg"
+          alt="Styleguide sample photo" width="600" height="499">
+        <p class="outlet">Sample Outlet</p>
+        <h3>Second headline, cropped by object-fit to the 3:2 frame</h3>
+      </div>
+      <div class="news-item">
+        <img src="assets/img/news/lookout-mountain.jpg"
+          alt="Styleguide sample photo" width="600" height="450">
+        <p class="outlet">Sample Outlet</p>
+        <h3>Third headline, to show the auto-fit grid wrapping</h3>
+      </div>
+    </div>
+  </section>
+
+  <section class="sg-section">
+    <p class="sg-label">Titled list</p>
+    <ul class="titled-list">
+      <li>
+        <h3>Ground-Penetrating Radar Cart</h3>
+        <p>Placeholder description of an equipment entry, checking the
+          muted body color and the 68ch measure inside a list item.</p>
+      </li>
+      <li>
+        <h3>Fluxgate Magnetic Gradiometer</h3>
+        <p>A second entry, to show the hairline divider between list
+          items and the spacing above and below it.</p>
+      </li>
+    </ul>
+  </section>
+
+  <section class="sg-section">
+    <p class="sg-label">Horizontal rule</p>
+    <p class="prose">The <code>.rule</code> class is a manual hairline
+      divider for use within a section, distinct from the automatic
+      border that already appears between two adjacent
+      <code>&lt;section&gt;</code> elements.</p>
+    <hr class="rule">
+    <p class="prose">Content following the rule, to confirm the spacing
+      above and below it.</p>
+  </section>
+
+  <section class="sg-section">
+    <p class="sg-label">Color tokens</p>
+    <div class="sg-swatches">
+      <div class="sg-swatch">
+        <div class="sg-swatch__fill" style="background:var(--bg)"></div>
+        <div class="sg-swatch__meta">--bg<code>#FFFFFF</code></div>
+      </div>
+      <div class="sg-swatch">
+        <div class="sg-swatch__fill" style="background:var(--bg-subtle)"></div>
+        <div class="sg-swatch__meta">--bg-subtle<code>#FAFAF8</code></div>
+      </div>
+      <div class="sg-swatch">
+        <div class="sg-swatch__fill" style="background:var(--ink)"></div>
+        <div class="sg-swatch__meta">--ink<code>#1A1A1A</code></div>
+      </div>
+      <div class="sg-swatch">
+        <div class="sg-swatch__fill" style="background:var(--ink-muted)"></div>
+        <div class="sg-swatch__meta">--ink-muted<code>#5A5A5A</code></div>
+      </div>
+      <div class="sg-swatch">
+        <div class="sg-swatch__fill" style="background:var(--rule)"></div>
+        <div class="sg-swatch__meta">--rule<code>#E5E5E5</code></div>
+      </div>
+      <div class="sg-swatch">
+        <div class="sg-swatch__fill" style="background:var(--gold)"></div>
+        <div class="sg-swatch__meta">--gold<code>#CFAE70</code></div>
+      </div>
+      <div class="sg-swatch">
+        <div class="sg-swatch__fill" style="background:var(--gold-deep)"></div>
+        <div class="sg-swatch__meta">--gold-deep<code>#8A6D3B</code></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+</body>
+</html>

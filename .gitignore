@@ -1,0 +1,17 @@
+# OS cruft
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Raw, pre-optimization source imagery (kept locally, not published)
+_source/
+
+# Internal build/design records — not for public publication. Kept on
+# disk as the project's design record; never tracked in git.
+docs/superpowers/
+.superpowers/
+
+# Python tooling
+__pycache__/
+*.pyc
+.venv/
