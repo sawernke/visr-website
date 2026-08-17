@@ -8,7 +8,10 @@
   --gold: #CFAE70;      /* decorative only — never a text color */
   --gold-deep: #8A6D3B; /* the accent for text */
 
-  --font-display: "Newsreader", Georgia, serif;
+  /* h1/h2 only; h3 and below use --font-body. The fallbacks are the two
+     grotesques already installed almost everywhere, so a failed font load
+     degrades to something close rather than to a serif. */
+  --font-display: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
 
   --s1: 4px;  --s2: 8px;  --s3: 12px; --s4: 16px; --s5: 24px;
@@ -32,12 +35,8 @@
   src: url("../fonts/inter-600.woff2") format("woff2"); font-display: swap;
 }
 @font-face {
-  font-family: "Newsreader"; font-style: normal; font-weight: 400;
-  src: url("../fonts/newsreader-400.woff2") format("woff2"); font-display: swap;
-}
-@font-face {
-  font-family: "Newsreader"; font-style: normal; font-weight: 600;
-  src: url("../fonts/newsreader-600.woff2") format("woff2"); font-display: swap;
+  font-family: "Roboto"; font-style: normal; font-weight: 600;
+  src: url("../fonts/roboto-600.woff2") format("woff2"); font-display: swap;
 }
 
 /* ---- Reset ---- */
