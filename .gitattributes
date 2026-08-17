@@ -1,0 +1,22 @@
+# Line endings
+#
+# Every text file in this repository is stored and checked out with Unix
+# (LF) line endings. Without this, opening and saving a page on Windows —
+# or on a network volume that rewrites line endings on its own — silently
+# converts the file to CRLF. Nothing about the page changes, but git then
+# reports every line of every page as modified, which buries any real edit
+# in thousands of lines of noise. `eol=lf` keeps that from happening.
+* text=auto eol=lf
+
+# Binary assets. Git must never rewrite line endings inside these, and
+# never try to show a line-by-line diff of them.
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.webp  binary
+*.gif   binary
+*.ico   binary
+*.woff  binary
+*.woff2 binary
+*.ttf   binary
+*.pdf   binary

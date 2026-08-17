@@ -289,34 +289,185 @@ name itself, which is a much harder problem to undo. Registrar transfer
 is a separate, deliberate step and is not addressed by anything in this
 repository.
 
-## Deploying (not yet done)
+## Deployment status (live)
 
-As of this repository's current state, the site has not been pushed to a
-public GitHub repository or connected to GitHub Pages — that is a
-deliberate decision requiring the site owner's authorization, not
-something automated as part of building the pages.
+The site is deployed. It is served by GitHub Pages from
+<https://github.com/sawernke/visr-website>, from the default branch, folder
+`/`.
 
-**A sequencing problem to know about before pushing:** `CNAME` (containing
-`visrvu.org`) is already committed to this repo. GitHub Pages reads that
-file on the very first deploy and configures the custom domain
-immediately — so `https://<username>.github.io/<repo>/` will **not** show
-a working preview of the new site. It will instead redirect straight to
-`visrvu.org`, which still points at the old Bluehost site until the DNS
-change above is made. "Push, then verify at the `github.io` URL before
-touching DNS" therefore cannot work as long as `CNAME` ships in that first
-push. Use one of these two sequences instead:
+The DNS cutover described above has been made. As verified on 2026-08-17:
 
-1. **Hold `CNAME` out of the first push, add it back after verifying.**
-   Push everything except `CNAME` (temporarily move it aside, or delete
-   and re-add it in a later commit), enable Pages, and confirm the site
-   looks right at the `github.io` URL. Once satisfied, commit `CNAME` and
-   push again — *then* make the DNS change described above.
-2. **Skip `github.io` verification and verify after DNS propagates.**
-   Push everything including `CNAME` from the start, enable Pages, make
-   the DNS change immediately, and do the visual/functional check at
-   `visrvu.org` itself once DNS has propagated (anywhere from a few
-   minutes to about 48 hours, depending on the old record's TTL).
+- The four apex `A` records point at GitHub Pages. The old Bluehost
+  address (`66.235.200.147`) is gone.
+- `www.visrvu.org` is a `CNAME` to `sawernke.github.io.`
+- `https://sawernke.github.io/visr-website/` redirects to `visrvu.org`,
+  which is the expected behaviour once `CNAME` is deployed.
+- The optional `AAAA` (IPv6) records listed above were never added. They
+  remain optional.
+- The domain has no `CAA` record, so nothing blocks certificate issuance.
 
-Either way, broadly: create the GitHub repository, push this code, enable
-Pages (source: the default branch, folder `/`), and only then make the
-DNS change described above.
+### HTTPS
+
+Done on 2026-08-17. GitHub issued the certificate and **Enforce HTTPS** is
+ticked in the repository's Settings → Pages panel. Verified the same day:
+
+- `https://visrvu.org` returns `HTTP/2 200`.
+- `http://visrvu.org` returns `301` to the `https://` address.
+- `https://www.visrvu.org` returns `301` to `https://visrvu.org`.
+
+To re-check any of that from a terminal:
+
+```bash
+curl -sS -I https://visrvu.org/
+```
+
+An error reading `SSL: no alternative certificate subject name matches
+target host name` would mean the certificate has lapsed or been revoked.
+
+### Domain verification (do not delete this DNS record)
+
+Done on 2026-08-17. GitHub reports `visrvu.org` as **Verified** under
+<https://github.com/settings/pages>.
+
+This is a security measure, not a cosmetic one. An *unverified* custom
+domain can be claimed by any other GitHub user the moment it stops being
+linked to this repository — if the repo is deleted, made private on a plan
+that disallows Pages, or otherwise unlinked, while DNS still points at
+GitHub. That is a domain takeover: a stranger's site appears at
+`visrvu.org`. Verification restricts Pages publishing on this domain to
+repositories owned by the `sawernke` account, which closes that window.
+
+Verification rests on one `TXT` record living in the DNS zone:
+
+```text
+Name:  _github-pages-challenge-sawernke.visrvu.org.
+Type:  TXT
+Value: a8b1eeed4f2ad4fd62ba1befef837c
+TTL:   14400
+```
+
+**This record must stay in place permanently, and must be recreated in any
+new DNS zone the domain is ever moved to** — see the easyDNS section below.
+Deleting it silently returns the domain to the unverified, takeover-prone
+state. To confirm it is still live:
+
+```bash
+dig +short TXT _github-pages-challenge-sawernke.visrvu.org
+```
+
+One entry-format note, since the two Bluehost DNS screens differ: the
+cPanel **Zone Editor** takes the fully-qualified name with the trailing dot
+exactly as written above, whereas the simpler Bluehost **Domains → DNS**
+tab takes only the `_github-pages-challenge-sawernke` prefix and appends
+the domain itself. Entering the full name into the second one produces a
+broken `..visrvu.org.visrvu.org` record that never verifies.
+
+## Planned: registrar transfer to easyDNS
+
+The domain is to be moved off Bluehost entirely and consolidated at
+**easydns.com**, where the owner's other domains are registered. This has
+not been started as of 2026-08-17. There is no deadline pressure — the
+registration runs to **2027-05-19**.
+
+Current registration facts, from `whois visrvu.org` on 2026-08-17:
+
+```text
+Registrar:      Bluehost Inc.
+Created:        2023-05-19
+Registry expiry: 2027-05-19
+Domain status:  clientTransferProhibited   (the registrar transfer lock)
+Nameservers:    ns1.bluehost.com, ns2.bluehost.com
+```
+
+### Two things to check before starting
+
+**1. The registrant contact email.** Transfer approval is sent by email to
+the domain's registrant contact address. If that address is at
+`@visrvu.org` it cannot be read — the mailbox on the Bluehost side was
+never set up or used (see "Email records" below) — and the transfer will
+stall with no obvious cause. Confirm at Bluehost that the contact address
+is a mailbox the owner actually reads, and change it if not.
+
+**2. The 60-day transfer block.** ICANN blocks a transfer for 60 days after
+a registrant contact change. The WHOIS "Updated Date" was 2026-08-12, five
+days before this was written, so a block may be active into roughly
+mid-October 2026. Ask Bluehost directly rather than guessing. Note that
+changing the contact email under point 1 can itself start a fresh 60-day
+block, so do that first and then wait, rather than discovering it later.
+
+### Order of operations
+
+Getting this out of order is what forfeits a domain, so do not compress it:
+
+1. **Build the zone at easyDNS first,** before the transfer runs. It needs
+   the four apex `A` records, the `www` `CNAME`, and — critically — the
+   `_github-pages-challenge-sawernke` `TXT` record from the section above.
+   See "Use an ALIAS record" below before copying the `A` records blindly.
+2. **Unlock at Bluehost.** Clear `clientTransferProhibited` and request the
+   EPP (authorization) code. Disable WHOIS privacy if it blocks the code.
+3. **Start the transfer at easyDNS** and approve it from the contact
+   mailbox confirmed in step 1 above.
+4. **Verify after the nameservers change.** The site must still load over
+   HTTPS, and `dig +short TXT _github-pages-challenge-sawernke.visrvu.org`
+   must still return the challenge value. If that record did not survive
+   the move, re-add it immediately.
+5. **Only then cancel Bluehost.** Not before step 4 passes. The warning in
+   "The registrar caveat" above applies in full until the transfer has
+   actually completed.
+
+### Use an ALIAS record at the apex
+
+easyDNS supports `ALIAS` records, and GitHub's documentation explicitly
+permits `ALIAS`/`ANAME` at the apex as an alternative to `A` records. Point
+an apex `ALIAS` at `sawernke.github.io` rather than copying the four
+hardcoded GitHub IPs across.
+
+The reason is durability. The four `A` addresses in "DNS records for the
+cutover" above are correct today — re-verified against GitHub's
+documentation on 2026-08-17 — but GitHub does not guarantee them forever,
+and a stale hardcoded address takes the whole site offline with no useful
+error. An `ALIAS` follows GitHub's own DNS and survives such a change
+without any action here. Bluehost's zone editor offers no `ALIAS` record
+type, which is the only reason the `A` records are used at present.
+
+### Email records
+
+The zone still carries mail routing left over from Bluehost:
+
+```text
+MX   visrvu.org  →  mail.visrvu.org  →  162.241.226.124  (Bluehost)
+TXT  v=spf1 ip4:162.241.226.124 a mx include:websitewelcome.com ~all
+```
+
+**The `@visrvu.org` mailbox this points at has never been used.** No
+address at this domain appears anywhere on the site — the published contact
+address is `s.wernke[at]vanderbilt.edu`, and `verify.py` actively fails the
+build if a `@vanderbilt.edu` address or a `mailto:` link is written in
+plain form. Nothing depends on this mail routing.
+
+So these two records can simply be dropped when the zone is rebuilt at
+easyDNS; they need not be recreated. Cancelling Bluehost will stop that
+mail path regardless. The `SPF` record above is additionally stale: its `a`
+mechanism now resolves to GitHub's Pages addresses, which never send mail.
+
+
+
+## Line endings
+
+This repository stores every text file with Unix (LF) line endings, and
+`.gitattributes` enforces that on checkout. This is not cosmetic. Editing a
+page on Windows, or on a network volume that rewrites line endings on save,
+can convert a file to CRLF. The visible text does not change at all, but
+git then reports every line of every page as modified — on 2026-08-17 this
+produced a diff of 1691 added and 1691 removed lines across twenty files
+with not one word actually changed, which would hide any genuine edit.
+
+If you ever see a suspiciously large diff where added and removed line
+counts are identical, check for this before assuming the worst:
+
+```bash
+git diff --ignore-cr-at-eol --stat
+```
+
+If that prints nothing, the only difference is line endings, and
+`git checkout -- .` restores the files safely.
