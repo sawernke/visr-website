@@ -42,7 +42,7 @@ about-visr/, augmented-reality-offerings/, visr-in-the-news/, visr/
 
 assets/css/site.css   The one stylesheet for the whole site
 assets/img/           Site imagery, already sized and compressed
-assets/fonts/         Self-hosted web fonts (no Google Fonts, no CDN)
+assets/fonts/         Self-hosted web fonts (see "Fonts" below)
 
 tools/verify.py            Checks the site before you push. Run this.
 tools/page-template.html   The master copy of the header/footer chrome
@@ -50,6 +50,13 @@ tools/make_redirects.py    Regenerates the nine redirect stub files
 tools/optimize_images.py   Re-downloads and re-compresses source imagery
 
 styleguide.html       A reference page showing the design system in one place
+
+docs/                 The original design spec and build plan, dated
+                      2026-08-13. A historical record of how the site was
+                      built, deliberately left unedited — it describes the
+                      site as first designed, not as it stands today. Where
+                      the two disagree, this README is correct. (The spec
+                      still describes serif headings, for example.)
 ```
 
 ## How to preview the site locally
@@ -62,7 +69,7 @@ unstyled page with broken links and broken images. Serve the repo with a
 trivial local HTTP server instead:
 
 ```bash
-python -m http.server 8000
+python3 -m http.server 8000
 ```
 
 Run that from the repo root, then open <http://localhost:8000/>. Every
@@ -121,7 +128,7 @@ site ends up with pages that look or behave inconsistently depending
 which one a visitor lands on.
 
 This sounds fragile, and it would be if nothing were watching for it. It
-isn't watching by hand — `python tools/verify.py` (see below) compares all
+isn't watching by hand — `python3 tools/verify.py` (see below) compares all
 four chrome regions on every page, including `404.html`, byte-for-byte
 against the copy in `tools/page-template.html`, and fails loudly with the
 exact page and region name if anything drifted. That check is the entire
@@ -131,7 +138,7 @@ cannot silently ship a page with stale chrome.
 
 Practical workflow: edit `tools/page-template.html` first to work out the
 change, then copy the same block into each of the nine content pages and
-into `404.html`, then run `python tools/verify.py` to confirm all eleven
+into `404.html`, then run `python3 tools/verify.py` to confirm all eleven
 agree.
 
 ## How to remove the hiring banner
@@ -147,7 +154,7 @@ run verification, and push.
 Before every push, run:
 
 ```bash
-python tools/verify.py
+python3 tools/verify.py
 ```
 
 from the repo root. It checks, among other things:
@@ -181,13 +188,13 @@ should only need to run this again if you're replacing or adding imagery.
 First, install the one dependency it needs:
 
 ```bash
-pip install --user Pillow
+pip3 install --user Pillow
 ```
 
 Then run:
 
 ```bash
-python tools/optimize_images.py
+python3 tools/optimize_images.py
 ```
 
 **Important Windows-specific warning:** Windows ships with its own
@@ -206,6 +213,61 @@ you're adding a new portrait, drop the source photo in `_source/`, add
 an entry to the `PORTRAITS` dict near the top of `optimize_images.py`,
 and re-run the script.
 
+## Fonts
+
+Two families are used, and which one applies depends only on the heading
+level:
+
+| Where | Family | Files |
+|---|---|---|
+| `h1` and `h2` | Roboto 600 | `roboto-600.woff2` |
+| `h3` and below, and all body text | Inter 400/500/600 | `inter-400.woff2`, `inter-500.woff2`, `inter-600.woff2` |
+
+That split is set in two places in `assets/css/site.css`: the
+`--font-display` and `--font-body` custom properties near the top of the
+file, and the `h1, h2, h3` rule under "Typography" (`h3` deliberately
+overrides itself back to `--font-body`).
+
+Headings were originally set in Newsreader, a serif. They changed to
+sans-serif on 2026-08-17, and Newsreader was removed entirely at the same
+time because nothing else referenced it.
+
+### The no-CDN rule
+
+The font *files* are downloaded once, committed to this repository, and
+served from this domain. **A visitor's browser never contacts Google Fonts,
+jsDelivr, or any other third party.** `verify.py` enforces this: it fails
+the build if any page requests `fonts.googleapis.com`, `fonts.gstatic.com`,
+or `cdn.jsdelivr.net`.
+
+Note that "no Google Fonts" means no *request* to Google, not that a font
+published by Google is off-limits. Roboto is a Google-published font under
+the Apache 2.0 licence, downloaded and self-hosted here like any other.
+Inter is under the SIL Open Font License. Both licences permit this, and
+`assets/fonts/LICENSES.md` records which is which.
+
+### Adding or replacing a font
+
+1. Get the **Latin subset** `.woff2`, not the full family. The subset files
+   are 12–25 KB; a full family is many times that. Google Fonts serves the
+   subset directly if you request one weight and follow the `latin` block
+   of the CSS it returns.
+2. Put the file in `assets/fonts/` and record its licence in
+   `assets/fonts/LICENSES.md`.
+3. Add an `@font-face` rule in the "Fonts" block of `assets/css/site.css`,
+   and point `--font-display` or `--font-body` at it.
+4. **If the new font replaces a preloaded one, update the preload too.** The
+   `<head>` of every page preloads the body font and the heading font by
+   filename. That line lives in the shared chrome, so it appears **eleven
+   times** — see "The nav duplication warning" above. A preload pointing at
+   a deleted file makes every page fetch a 404 at high priority; a preload
+   left pointing at an unused font wastes the same bandwidth silently.
+5. Delete any font that is no longer referenced, and run
+   `python3 tools/verify.py`. It checks the total weight of
+   `assets/fonts/*.woff2` against a budget.
+
+As of 2026-08-17 the site ships four files totalling about 89 KB.
+
 ## Legacy URL redirects
 
 The old WordPress site had different URLs than this one (for example,
@@ -218,7 +280,7 @@ the top of `tools/verify.py`. If a URL ever needs to move again, update
 that mapping and regenerate the stubs with:
 
 ```bash
-python tools/make_redirects.py
+python3 tools/make_redirects.py
 ```
 
 Do not hand-edit the files under `about-visr/`, `augmented-reality-offerings/`,
