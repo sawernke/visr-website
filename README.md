@@ -381,12 +381,22 @@ Nameservers:    ns1.bluehost.com, ns2.bluehost.com
 
 ### Two things to check before starting
 
-**1. The registrant contact email.** Transfer approval is sent by email to
-the domain's registrant contact address. If that address is at
-`@visrvu.org` it cannot be read — the mailbox on the Bluehost side was
-never set up or used (see "Email records" below) — and the transfer will
-stall with no obvious cause. Confirm at Bluehost that the contact address
-is a mailbox the owner actually reads, and change it if not.
+**1. The registrant contact email.** Two different things are easy to
+confuse here, and only one of them is a risk:
+
+- The `@visrvu.org` *mailbox* Bluehost can host. The owner confirms this was
+  never used at all (see "Email records" below). Nothing depends on it and
+  it needs no protecting.
+- The *registrant contact address written on the domain record*. This is a
+  separate field, and it is where the registrar sends the EPP code and the
+  approval request that ICANN requires for a transfer.
+
+WHOIS redacts that second field for privacy, so it can only be read from
+inside the Bluehost control panel. Look at it before starting. If whoever
+registered the domain in 2023 entered a `@visrvu.org` address, the approval
+mail lands in a mailbox that was never created, and the transfer stalls
+with no error shown anywhere. If it is an address the owner actually reads,
+there is nothing to do.
 
 **2. The 60-day transfer block.** ICANN blocks a transfer for 60 days after
 a registrant contact change. The WHOIS "Updated Date" was 2026-08-12, five
@@ -439,11 +449,18 @@ MX   visrvu.org  →  mail.visrvu.org  →  162.241.226.124  (Bluehost)
 TXT  v=spf1 ip4:162.241.226.124 a mx include:websitewelcome.com ~all
 ```
 
-**The `@visrvu.org` mailbox this points at has never been used.** No
-address at this domain appears anywhere on the site — the published contact
-address is `s.wernke[at]vanderbilt.edu`, and `verify.py` actively fails the
-build if a `@vanderbilt.edu` address or a `mailto:` link is written in
-plain form. Nothing depends on this mail routing.
+**The `@visrvu.org` mailbox this points at has never been used.** The owner
+confirmed this directly on 2026-08-17: it was never set up and never read.
+That is consistent with the site itself — no address at this domain appears
+anywhere on it. The published contact address is
+`s.wernke[at]vanderbilt.edu`, and `verify.py` actively fails the build if a
+`@vanderbilt.edu` address or a `mailto:` link is written in plain form.
+Nothing depends on this mail routing.
+
+Because of that, **the Bluehost account can be closed outright** once the
+domain is safely at easyDNS. There is no mailbox to migrate and no mail to
+preserve first. The only constraint on closing it is timing, not content —
+see "Order of operations" above, and "The registrar caveat" further up.
 
 So these two records can simply be dropped when the zone is rebuilt at
 easyDNS; they need not be recreated. Cancelling Bluehost will stop that
