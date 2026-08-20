@@ -126,9 +126,16 @@ A few conventions worth knowing:
   page it targets.
 - Vertical rhythm is one value: `section { padding-block: var(--s7) }`, so
   every section has 48px above and below it and neighbours sit 96px apart.
-  Change that one declaration and the whole site moves together. `h1 +
-  .prose` adds a 16px gap under a page title, because the reset zeroes every
-  heading margin and an `<h1>` is large enough to need it.
+  Change that one declaration and the whole site moves together.
+- The reset zeroes every heading margin, so three small rules put the air
+  back: `h1 + .prose` (16px under a page title), `h2 { margin-bottom }`
+  (24px under a section heading) and `section > h3` (24px above, 8px below a
+  bare sub-heading). Adjacent sibling margins collapse, so a block that sets
+  its own `margin-top` — `.titled-list`, `.services__grid`, `.news-grid` and
+  `.team-grid` all use 32px — keeps its larger value instead of adding to
+  these. The `section > h3` rules are deliberately scoped to direct children,
+  so an `<h3>` inside a team card, news item, services column or titled-list
+  entry keeps whatever spacing its own component sets.
 - An entry in a `.titled-list` can carry a photo beside its own text: give
   the `<li>` `class="has-figure"` and put a `<picture>` inside it, after the
   `<p>`. The rules in `site.css` put the text left and the photo right in a

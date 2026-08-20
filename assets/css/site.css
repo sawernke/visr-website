@@ -94,10 +94,20 @@ section { padding-block: var(--s7); }
 section + section { border-top: 1px solid var(--rule); }
 .rule { border: 0; border-top: 1px solid var(--rule); margin-block: var(--s7); }
 
-/* The reset zeroes every heading margin, which left the page title sitting
-   flush on top of its own intro paragraph. h1 is large enough that it needs
-   a little air; h2 and below already read fine without it. */
+/* The reset zeroes every heading margin, so a heading sat flush on top of
+   whatever followed it. These give each one air below. Adjacent sibling
+   margins collapse, so a block that already sets its own margin-top --
+   .titled-list, .services__grid, .news-grid, .team-grid all use var(--s6)
+   -- keeps its larger value rather than adding to these. */
 h1 + .prose { margin-top: var(--s4); }
+h2 { margin-bottom: var(--s5); }
+/* A bare h3 sitting straight in a section -- the "What we can detect"
+   pattern of heading, list, heading, list -- had no air either side, so
+   each heading sat on its own list and on the list above it. Scoped to
+   direct children so the h3 inside a team card, news item, services
+   column or titled-list entry keeps the spacing its own component sets. */
+section > h3 { margin-bottom: var(--s2); }
+section > * + h3 { margin-top: var(--s5); }
 
 .skip-link { position: absolute; left: -9999px; top: 0; background: var(--ink);
   color: #fff; padding: var(--s3) var(--s4); z-index: 100; }
