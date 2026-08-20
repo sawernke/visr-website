@@ -113,8 +113,22 @@ A few conventions worth knowing:
   footer copy takes `class="name-link"` because the footer's own link style
   is colored and underline-free, which would make the name read as *less*
   prominent than the text beside it; that class restores the normal
-  underlined-link look. External links here take `rel="noopener"` and no
-  `target`, matching the LinkedIn and job-posting links.
+  underlined-link look. These three take `target="_blank"` so the director's
+  site opens in a new tab; every other external link on the site (LinkedIn,
+  the job posting) stays in the same tab with `rel="noopener"` and no
+  `target`.
+- The primary nav carries eight items and the page each one points at marks
+  its own link with `aria-current="page"`. That attribute is the one part of
+  the chrome allowed to differ per page — `verify.py` strips it before
+  comparing, so a nav item that is current on one page does not read as
+  drift. If you add a nav item, remember to add it to all eleven copies,
+  including `tools/page-template.html`, and to set `aria-current` on the
+  page it targets.
+- The first `<section>` inside `<main>` is the page lead-in: an `<h1>` and a
+  short intro. It gets tighter `padding-block` than the sections after it
+  (see `main > section:first-child` in `site.css`), so the page title sits
+  close under the header instead of below a large empty band. The home page
+  is unaffected — its first child is the wordmark band, not a `<section>`.
 
 ## The nav duplication warning (read this before touching the header or footer)
 

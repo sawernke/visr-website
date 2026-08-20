@@ -94,6 +94,18 @@ section { padding-block: var(--s9); }
 section + section { border-top: 1px solid var(--rule); }
 .rule { border: 0; border-top: 1px solid var(--rule); margin-block: var(--s7); }
 
+/* Page lead-in. On every page but the home page, the first section holds
+   only the <h1> and a short intro, so a full var(--s9) band above and below
+   it left a large empty gap under the header and an even larger one before
+   the first real section. The home page is untouched: its first child is
+   the wordmark band, not a <section>. */
+main > section:first-child { padding-block: var(--s7); }
+main > section:first-child + section { padding-top: var(--s7); }
+/* The reset zeroes every heading margin, which left the page title sitting
+   flush on top of its own intro paragraph. h1 is large enough that it needs
+   a little air; h2 and below already read fine without it. */
+h1 + .prose { margin-top: var(--s4); }
+
 .skip-link { position: absolute; left: -9999px; top: 0; background: var(--ink);
   color: #fff; padding: var(--s3) var(--s4); z-index: 100; }
 .skip-link:focus { left: 0; }
