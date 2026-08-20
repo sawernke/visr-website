@@ -24,8 +24,12 @@ PROFILES = {
     "portrait": (600, 80, 82),
 }
 
-# Logo is displayed at 132px wide in the page header; 264 is 2x for retina.
-LOGO_WIDTH = 264
+# The header lockup is displayed 119px wide; 400 covers it to 3x.
+LOGO_WIDTH = 400
+# The home-page band draws the wordmark 320px wide, so 640 would cover 2x.
+# 800 is deliberate headroom: it also holds up on a 3x phone, and the band
+# can be enlarged in site.css without regenerating the asset.
+WORDMARK_WIDTH = 800
 
 BASE = "https://visrvu.org/wp-content/uploads"
 
@@ -56,6 +60,13 @@ SOURCES = [
 ]
 
 LOGO_URL = f"{BASE}/2025/02/VISR_logo_03.png"
+
+# The owner supplied the same artwork at five resolutions. The 2x file is
+# the smallest one that still covers WORDMARK_WIDTH without upscaling, so
+# it is the master. It is preferred over LOGO_URL because it is already
+# cut out against transparency and does not need the network. Lives in
+# the gitignored _source/ tree, so a fresh clone falls back to the URL.
+LOGO_MASTER = ("VISR_logo_v05_for_web/2x/VISR_logo_03@2x.png")
 
 # Some source photos are the wrong orientation for where they're used and
 # need a deliberate crop before resizing. name -> (aspect_w, aspect_h, top).
@@ -188,39 +199,51 @@ def process(category, name, url):
     return True
 
 
+def _encode_logo(img, width, budget):
+    """Palette-quantize to the widest size that still fits the byte budget."""
+    data = b""
+    while True:
+        scaled = img
+        if scaled.width != width:
+            height = round(img.height * width / img.width)
+            scaled = img.resize((width, height), Image.LANCZOS)
+        for colors in (256, 128, 64, 32):
+            buf = io.BytesIO()
+            scaled.quantize(colors=colors).save(buf, "PNG", optimize=True)
+            data = buf.getvalue()
+            if len(data) <= budget:
+                return scaled, data, False
+        if width <= 120:
+            return scaled, data, True
+        width = max(120, round(width * 0.85))
+
+
+def _logo_master():
+    """The local master if the owner supplied one, else the live-site copy."""
+    local = SOURCE_DIR / LOGO_MASTER
+    if local.is_file():
+        return Image.open(local).convert("RGBA")
+    return Image.open(io.BytesIO(fetch(LOGO_URL))).convert("RGBA")
+
+
 def process_logo():
+    """Emit both logo assets: the header lockup and the hero-band wordmark."""
     target = OUT / "logo"
     target.mkdir(parents=True, exist_ok=True)
     budget = IMG_BUDGETS["logo"]
     try:
-        raw = fetch(LOGO_URL)
+        master = _logo_master()
     except Exception as exc:
         print(f"  SKIP visr-logo: {exc}")
         return False
 
-    width = LOGO_WIDTH
-    data = b""
-    img = None
-    for _ in range(6):
-        img = Image.open(io.BytesIO(raw)).convert("RGBA")
-        if img.width > width:
-            height = round(img.height * width / img.width)
-            img = img.resize((width, height), Image.LANCZOS)
-        for colors in (256, 128, 64, 32):
-            quant = img.quantize(colors=colors)
-            buf = io.BytesIO()
-            quant.save(buf, "PNG", optimize=True)
-            data = buf.getvalue()
-            if len(data) <= budget:
-                break
-        if len(data) <= budget:
-            break
-        width = max(120, round(width * 0.85))
-
-    (target / "visr-logo.png").write_bytes(data)
-    over = len(data) > budget
-    flag = "  ** OVER BUDGET **" if over else ""
-    print(f"  visr-logo: {img.width}x{img.height}  png {len(data)/1024:.0f}KB{flag}")
+    for name, width in (("visr-logo", LOGO_WIDTH),
+                        ("visr-wordmark", WORDMARK_WIDTH)):
+        img, data, over = _encode_logo(master, width, budget)
+        (target / f"{name}.png").write_bytes(data)
+        flag = "  ** OVER BUDGET **" if over else ""
+        print(f"  {name}: {img.width}x{img.height}  "
+              f"png {len(data)/1024:.0f}KB{flag}")
     return True
 
 

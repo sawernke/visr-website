@@ -52,7 +52,15 @@ IMG_BUDGETS = {
     "inline": 150_000,
     "news": 60_000,
     "portrait": 80_000,
-    "logo": 30_000,
+    # Two logo assets share this bucket: visr-logo.png (the header
+    # lockup, on the ten pages that show one) and visr-wordmark.png
+    # (the home-page band, drawn 320px wide). The wordmark file is
+    # 800px, well over the 640px that 2x needs, so it also holds up on
+    # a 3x phone and leaves room to enlarge the band later without
+    # rebuilding. The topographic texture inside the letterforms is
+    # what costs the bytes — it does not palette-compress away. The
+    # homepage total still lands far under HOMEPAGE_BUDGET below.
+    "logo": 45_000,
 }
 
 HOMEPAGE_BUDGET = 800_000

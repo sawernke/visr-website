@@ -15,3 +15,6 @@ docs/superpowers/
 __pycache__/
 *.pyc
 .venv/
+
+# Lavish review artifacts (local review surface, not published)
+.lavish/

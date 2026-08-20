@@ -18,6 +18,10 @@ warning" below — read that section before editing the header or footer.
 below — cancelling or downgrading it at the wrong time can forfeit the
 `visrvu.org` domain, not just take the site offline.**
 
+**Work in progress:** the domain is due to move from Bluehost to easyDNS,
+after which Bluehost is to be closed. It is paused and not started. Pick it
+up at "Registrar transfer to easyDNS (paused — start here)" below.
+
 ## Repo layout
 
 ```text
@@ -41,7 +45,9 @@ about-visr/, augmented-reality-offerings/, visr-in-the-news/, visr/
                       Redirect stubs for old WordPress URLs (see below)
 
 assets/css/site.css   The one stylesheet for the whole site
-assets/img/           Site imagery, already sized and compressed
+assets/img/           Site imagery, already sized and compressed.
+                      logo/ holds two files: visr-logo.png (header)
+                      and visr-wordmark.png (home-page band).
 assets/fonts/         Self-hosted web fonts (see "Fonts" below)
 
 tools/verify.py            Checks the site before you push. Run this.
@@ -99,6 +105,16 @@ A few conventions worth knowing:
   appears as the literal text `s.wernke[at]vanderbilt.edu` — this is
   intentional, to keep it out of spam-harvesting bots' reach. Don't
   "fix" it into a `mailto:` link.
+- The director's name links to `https://stevenwernke.com` in exactly three
+  places: the footer `Contact` block (so, every page), and on the Team page
+  only, both the `Get in touch` line and the card heading. The `Get in
+  touch` line on the other five pages is deliberately plain text — one link
+  per page in the body is enough, and the footer already carries it. The
+  footer copy takes `class="name-link"` because the footer's own link style
+  is colored and underline-free, which would make the name read as *less*
+  prominent than the text beside it; that class restores the normal
+  underlined-link look. External links here take `rel="noopener"` and no
+  `target`, matching the LinkedIn and job-posting links.
 
 ## The nav duplication warning (read this before touching the header or footer)
 
@@ -148,6 +164,40 @@ Program Manager. Once that position is filled, remove it by deleting the
 `<aside class="hiring">...</aside>` block from `index.html` — the whole
 element, from `<aside class="hiring">` to its closing `</aside>`. Save,
 run verification, and push.
+
+## The home-page wordmark band
+
+`index.html` opens with a full-width tinted band holding the VISR
+wordmark, above the hero heading. It is the `<div class="logo-band">`
+block, and it is the only place `visr-wordmark.png` is used — no other
+page has one, so `.logo-band` only ever matches on the home page.
+
+Two things to know before changing it:
+
+- The image carries `alt=""` **on purpose**. The header lockup directly
+  above it already announces "VISR — Vanderbilt Institute for Spatial
+  Research", so giving this one alt text too would make a screen reader
+  say the same thing twice in a row. It is decorative here.
+- Its displayed width is set once, in `.logo-band img` in `site.css`
+  (320 px). The asset is 800 px, so you can go up to about 400 px before
+  a retina screen starts to soften. Past that, raise `WORDMARK_WIDTH` in
+  `optimize_images.py` to twice the displayed width and re-run it.
+
+**The home page hides the header lockup.** With the band directly beneath
+it, the header's small logo would repeat the same mark twice within about
+40 px. The header markup is *not* different there — it cannot be, it is
+CHROME. Instead `index.html` alone carries `<body class="home">`, and two
+rules in `site.css` (`.home .site-header .wrap > a`) hide the lockup and
+push the nav right. The `<body>` tag sits just above
+`<!-- CHROME:BOOT:START -->`, so it is outside every chrome region and safe
+to differ. If you ever add a second page that should behave this way, give
+it the same body class rather than editing the header.
+
+To remove the band, delete the whole `<div class="logo-band">...</div>`
+block from `index.html`, drop `class="home"` from its `<body>` so the
+header lockup comes back, and raise `.hero h1` again — it was stepped down
+when the band was added, because it became a subtitle to the wordmark
+rather than the top of the page.
 
 ## How to run verification
 
@@ -212,6 +262,30 @@ it holds full-resolution originals that don't need to be published. If
 you're adding a new portrait, drop the source photo in `_source/`, add
 an entry to the `PORTRAITS` dict near the top of `optimize_images.py`,
 and re-run the script.
+
+### The two logo files
+
+`process_logo()` writes **two** assets from one master, because the logo
+does two different jobs at two different sizes:
+
+```text
+assets/img/logo/visr-logo.png       400 x 163   the header lockup, on all 11 pages
+assets/img/logo/visr-wordmark.png   800 x 325   the home-page wordmark band only
+```
+
+The header draws its copy 119 px wide (`.site-header img` in `site.css`),
+so 400 px keeps it sharp down to a 3x phone screen. The wordmark band
+draws its copy 400 px wide, so 800 px is the 2x retina size. Both are
+palette PNGs; the topographic texture inside the letterforms is what
+makes them cost ~16 KB and ~39 KB rather than a few KB.
+
+The master is `_source/VISR_logo_v05_for_web/2x/VISR_logo_03@2x.png`
+(1392 x 566), supplied by the owner at five resolutions. Like the
+portraits, it lives in the gitignored `_source/` tree, so a fresh clone
+without it falls back to downloading `LOGO_URL` from the old WordPress
+site. **Do not put the master pack back under `assets/img/`** — every
+file there is checked against a per-directory byte budget, and the 4x
+master alone is 444 KB.
 
 ## Fonts
 
@@ -424,24 +498,75 @@ tab takes only the `_github-pages-challenge-sawernke` prefix and appends
 the domain itself. Entering the full name into the second one produces a
 broken `..visrvu.org.visrvu.org` record that never verifies.
 
-## Planned: registrar transfer to easyDNS
+## Registrar transfer to easyDNS (paused — start here)
 
 The domain is to be moved off Bluehost entirely and consolidated at
-**easydns.com**, where the owner's other domains are registered. This has
-not been started as of 2026-08-17. There is no deadline pressure — the
-registration runs to **2027-05-19**.
+**easydns.com**, where the owner's other domains are registered, after
+which the Bluehost account is to be closed outright.
 
-Current registration facts, from `whois visrvu.org` on 2026-08-17:
+**Status: not started. Paused 2026-08-18 for lack of time.** Nothing below
+has been done — no zone built, no unlock requested, no contact checked. The
+site is live and healthy meanwhile; this transfer is housekeeping, not a
+repair. There is no deadline pressure, as the registration runs to
+**2027-05-19**.
+
+### Verified state as of 2026-08-18
+
+Re-verified from RDAP (`rdap.publicinterestregistry.org`) and public DNS
+(`8.8.8.8`) on 2026-08-18. Re-check these before acting on anything below,
+because a paused plan goes stale:
 
 ```text
-Registrar:      Bluehost Inc.
-Created:        2023-05-19
-Registry expiry: 2027-05-19
-Domain status:  clientTransferProhibited   (the registrar transfer lock)
-Nameservers:    ns1.bluehost.com, ns2.bluehost.com
+Registrar:          Bluehost Inc.
+Domain status:      clientTransferProhibited   (transfer lock, still on)
+Registered:         2023-05-19
+Registry expiry:    2027-05-19
+Registry changed:   2026-08-12                 (see "the 60-day block")
+Nameservers:        ns1.bluehost.com, ns2.bluehost.com
+Apex A records:     the four GitHub Pages addresses
+Challenge TXT:      present, a8b1eeed4f2ad4fd62ba1befef837c
+https://visrvu.org: HTTP 200
 ```
 
-### Two things to check before starting
+To reproduce that check:
+
+```bash
+curl -sS "https://rdap.publicinterestregistry.org/rdap/domain/visrvu.org"
+nslookup -type=NS  visrvu.org 8.8.8.8
+nslookup -type=TXT _github-pages-challenge-sawernke.visrvu.org 8.8.8.8
+curl -sS -I https://visrvu.org/
+```
+
+`whois` is not installed on the owner's Windows machine; RDAP is the
+working substitute and returns the same registry facts.
+
+### Split the move into two halves — DNS first, registrar second
+
+This supersedes the single ordered list that stood here previously. The
+sequence is the same in spirit, but the nameserver change is deliberately
+pulled out ahead of the registrar transfer instead of riding along with it.
+
+- **Half 1 — DNS.** Point the nameservers at easyDNS while Bluehost is
+  still the registrar.
+- **Half 2 — Registrar.** Transfer the registration to easyDNS. DNS does
+  not move during this half, because it moved already.
+- **Half 3 — Cancel Bluehost.** Only after half 2 is confirmed.
+
+The reason is that this isolates the one genuinely dangerous failure. If the
+new zone is wrong, the site goes down — but during half 1 that is undone in
+minutes by setting the nameservers back to Bluehost, because Bluehost still
+holds the registration and the old zone is still sitting there intact. Run
+the two moves together and a zone error instead arrives at the same moment
+as a registrar handover, when the escape hatch is gone and an unverified
+domain is exposed to the GitHub Pages takeover described under "Domain
+verification" above.
+
+A second reason: half 1 is unaffected by the 60-day transfer block, so it
+can proceed immediately even if that block turns out to be active.
+
+### Step 0 — two things to check at Bluehost before anything else
+
+Neither of these blocks half 1. Both block half 2.
 
 **1. The registrant contact email.** Two different things are easy to
 confuse here, and only one of them is a risk:
@@ -453,39 +578,85 @@ confuse here, and only one of them is a risk:
   separate field, and it is where the registrar sends the EPP code and the
   approval request that ICANN requires for a transfer.
 
-WHOIS redacts that second field for privacy, so it can only be read from
-inside the Bluehost control panel. Look at it before starting. If whoever
-registered the domain in 2023 entered a `@visrvu.org` address, the approval
-mail lands in a mailbox that was never created, and the transfer stalls
-with no error shown anywhere. If it is an address the owner actually reads,
-there is nothing to do.
+WHOIS and RDAP both redact that second field for privacy, so it can only be
+read from inside the Bluehost control panel. Look at it before starting. If
+whoever registered the domain in 2023 entered a `@visrvu.org` address, the
+approval mail lands in a mailbox that was never created, and the transfer
+stalls with no error shown anywhere. If it is an address the owner actually
+reads, there is nothing to do.
 
 **2. The 60-day transfer block.** ICANN blocks a transfer for 60 days after
-a registrant contact change. The WHOIS "Updated Date" was 2026-08-12, five
-days before this was written, so a block may be active into roughly
-mid-October 2026. Ask Bluehost directly rather than guessing. Note that
-changing the contact email under point 1 can itself start a fresh 60-day
-block, so do that first and then wait, rather than discovering it later.
+a registrant contact change. The registry's last-changed date is
+**2026-08-12**; if that date reflects a contact change, a block runs to
+approximately **2026-10-11**. RDAP does not say what changed, so this cannot
+be settled from outside — ask Bluehost support directly rather than
+guessing. Note that changing the contact email under point 1 can itself
+start a fresh 60-day block, so do that first and then wait, rather than
+discovering it later.
 
-### Order of operations
+### Half 1 — move DNS to easyDNS
 
-Getting this out of order is what forfeits a domain, so do not compress it:
+1. **Lower the TTLs at Bluehost first.** In the Bluehost zone editor, set
+   the TTL on the apex `A` records and the `www` `CNAME` to `300`, then wait
+   about four hours (the current TTL is 14400, i.e. four hours). This is
+   what makes the rollback in step 5 fast instead of an all-day wait.
+2. **Build the zone at easyDNS.** Three records:
 
-1. **Build the zone at easyDNS first,** before the transfer runs. It needs
-   the four apex `A` records, the `www` `CNAME`, and — critically — the
-   `_github-pages-challenge-sawernke` `TXT` record from the section above.
-   See "Use an ALIAS record" below before copying the `A` records blindly.
-2. **Unlock at Bluehost.** Clear `clientTransferProhibited` and request the
-   EPP (authorization) code. Disable WHOIS privacy if it blocks the code.
-3. **Start the transfer at easyDNS** and approve it from the contact
-   mailbox confirmed in step 1 above.
-4. **Verify after the nameservers change.** The site must still load over
-   HTTPS, and `dig +short TXT _github-pages-challenge-sawernke.visrvu.org`
-   must still return the challenge value. If that record did not survive
-   the move, re-add it immediately.
-5. **Only then cancel Bluehost.** Not before step 4 passes. The warning in
-   "The registrar caveat" above applies in full until the transfer has
-   actually completed.
+   ```text
+   ALIAS  @                                  sawernke.github.io
+   CNAME  www                                sawernke.github.io.
+   TXT    _github-pages-challenge-sawernke   a8b1eeed4f2ad4fd62ba1befef837c
+   ```
+
+   Use `ALIAS` at the apex rather than the four `A` records — see "Use an
+   ALIAS record at the apex" below for why. If easyDNS will not take an
+   `ALIAS`, fall back to the four `A` records listed under "DNS records for
+   the cutover" above, and re-verify them against GitHub's documentation
+   first.
+
+   The `TXT` record is not optional and not cosmetic; omitting it reopens
+   the domain-takeover window described under "Domain verification" above.
+   Enter only the `_github-pages-challenge-sawernke` prefix if easyDNS
+   appends the domain itself.
+
+   Do **not** recreate the `MX` or `SPF` records — see "Email records".
+3. **Change the nameservers at Bluehost** to the ones easyDNS gives at zone
+   setup. This is a registrar-side setting, not a zone record.
+4. **Wait about an hour, then verify** with the four commands under
+   "Verified state" above. All of it must still hold: easyDNS nameservers,
+   the same challenge `TXT` value, and `HTTP 200` over HTTPS. Then open
+   <https://github.com/settings/pages> and confirm `visrvu.org` still reads
+   **Verified**.
+5. **Rollback, if needed.** Set the nameservers at Bluehost back to
+   `ns1.bluehost.com` and `ns2.bluehost.com`. The old zone is untouched and
+   the site returns. Then find the fault in the easyDNS zone before trying
+   again.
+
+Leave it alone for a few days before starting half 2. There is no benefit to
+rushing, and a slow-burning zone error is easier to catch while the escape
+hatch is still open.
+
+### Half 2 — transfer the registration
+
+6. **Unlock at Bluehost.** Clear `clientTransferProhibited`, and disable
+   WHOIS privacy if it blocks release of the code.
+7. **Request the EPP (authorization) code** from Bluehost.
+8. **Start the transfer at easyDNS**, supplying the EPP code.
+9. **Approve it** from the contact mailbox confirmed in step 0.
+10. **Wait.** ICANN transfers take up to five days.
+11. **Verify again** with the same four commands. RDAP must now report
+    easyDNS as the registrar, and the site and the challenge `TXT` must be
+    unchanged.
+
+### Half 3 — cancel Bluehost
+
+Only after step 11 passes. The warning under "The registrar caveat" above
+applies in full until then: cancelling while Bluehost is still the registrar
+risks forfeiting `visrvu.org` itself, not merely taking the site offline.
+
+12. Confirm the domain no longer appears in the Bluehost account.
+13. Cancel the hosting plan and close the account.
+14. Ask about a refund for the unused term.
 
 ### Use an ALIAS record at the apex
 
@@ -522,12 +693,17 @@ Nothing depends on this mail routing.
 Because of that, **the Bluehost account can be closed outright** once the
 domain is safely at easyDNS. There is no mailbox to migrate and no mail to
 preserve first. The only constraint on closing it is timing, not content —
-see "Order of operations" above, and "The registrar caveat" further up.
+see "Half 3" above, and "The registrar caveat" further up.
 
 So these two records can simply be dropped when the zone is rebuilt at
 easyDNS; they need not be recreated. Cancelling Bluehost will stop that
 mail path regardless. The `SPF` record above is additionally stale: its `a`
 mechanism now resolves to GitHub's Pages addresses, which never send mail.
+
+This is also why the dead mailbox cannot serve as an escape hatch in step 0.
+If the registrant contact is an `@visrvu.org` address, preserving the `MX`
+record does not help, because there is no mailbox behind it at either
+registrar. The only fix is to change the contact address itself.
 
 
 
