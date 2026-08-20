@@ -37,7 +37,6 @@ BASE = "https://visrvu.org/wp-content/uploads"
 SOURCES = [
     ("hero", "campus-survey", f"{BASE}/2023/11/DSF6099-1.jpg"),
     ("inline", "field-team", f"{BASE}/2023/11/DSF5942-scaled-e1701790763135.jpg"),
-    ("inline", "gpr-survey", f"{BASE}/2024/06/a1.jpg"),
     ("inline", "gpr-cart", f"{BASE}/2024/07/IMG_0281-6-edited.jpg"),
     # IMG_1070 and IMG_0528 both sit under "The Magnetometer" on the live
     # page (confirmed against the live DOM, not just visually) and both
@@ -262,6 +261,45 @@ PORTRAITS = {
 }
 
 
+# name -> source filename under _source/, for inline imagery that came from
+# the owner rather than the old WordPress site. No cropping: these are used
+# full-frame in an .img-band, so only the width is normalised.
+LOCAL_INLINE = {
+    "gpr-survey": "20240502HM0250.jpg",
+}
+
+
+def process_local_inline():
+    """Resize and encode the images in LOCAL_INLINE to the inline profile.
+    Sources live in the gitignored _source/ directory and are skipped (not
+    fatal) if absent, same as the portraits."""
+    target = OUT / "inline"
+    target.mkdir(parents=True, exist_ok=True)
+    budget = IMG_BUDGETS["inline"]
+    max_w, webp_q0, jpeg_q0 = PROFILES["inline"]
+    ok = True
+    for name, filename in LOCAL_INLINE.items():
+        src = SOURCE_DIR / filename
+        if not src.is_file():
+            print(f"  SKIP {name}: {src} not found")
+            ok = False
+            continue
+        img = ImageOps.exif_transpose(Image.open(src)).convert("RGB")
+        if img.width > max_w:
+            img = img.resize((max_w, round(img.height * max_w / img.width)),
+                             Image.LANCZOS)
+        webp_data, webp_q = encode_under_budget(img, "WEBP", budget, webp_q0)
+        jpg_data, jpeg_q = encode_under_budget(img, "JPEG", budget, jpeg_q0)
+        (target / f"{name}.webp").write_bytes(webp_data)
+        (target / f"{name}.jpg").write_bytes(jpg_data)
+        over = len(webp_data) > budget or len(jpg_data) > budget
+        flag = "  ** OVER BUDGET **" if over else ""
+        print(f"  {name}: {img.width}x{img.height}  "
+              f"webp {len(webp_data)/1024:.0f}KB(q{webp_q})  "
+              f"jpg {len(jpg_data)/1024:.0f}KB(q{jpeg_q}){flag}")
+    return ok
+
+
 def process_portraits():
     """Crop and encode the staff portraits in PORTRAITS to 600x750 (4:5),
     reusing crop_to_aspect() and encode_under_budget() rather than
@@ -302,8 +340,9 @@ def main():
     print("Processing imagery...")
     ok = sum(process(c, n, u) for c, n, u in SOURCES)
     ok += process_logo()
+    ok += process_local_inline()
     ok += process_portraits()
-    total = len(SOURCES) + 2
+    total = len(SOURCES) + 3
     print(f"\n{ok}/{total} images processed")
     return 0 if ok == total else 1
 

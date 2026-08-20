@@ -283,6 +283,29 @@ you're adding a new portrait, drop the source photo in `_source/`, add
 an entry to the `PORTRAITS` dict near the top of `optimize_images.py`,
 and re-run the script.
 
+### Imagery the owner supplied
+
+Most photos on the site were pulled from the old WordPress install by the
+`SOURCES` list at the top of `optimize_images.py`. Anything the owner
+supplied instead goes through `_source/` — the same gitignored tree the
+portraits and the logo master use — and is listed in `LOCAL_INLINE`:
+
+```python
+LOCAL_INLINE = {
+    "gpr-survey": "20240502HM0250.jpg",
+}
+```
+
+`process_local_inline()` resizes each one to the `inline` profile (1200 px
+wide, under 150 KB in both WebP and JPEG) and writes both formats into
+`assets/img/inline/`. No cropping — these are used full-frame in an
+`.img-band`. To swap one out, drop the new original in `_source/`, point
+the entry at it, re-run the script, and update the `<img>` `alt`, `width`
+and `height` on the page that uses it.
+
+A name in `LOCAL_INLINE` must not also appear in `SOURCES`, or the two will
+fight over the same output file.
+
 ### The two logo files
 
 `process_logo()` writes **two** assets from one master, because the logo
