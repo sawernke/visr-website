@@ -18,3 +18,7 @@ __pycache__/
 
 # Lavish review artifacts (local review surface, not published)
 .lavish/
+
+# Candidate imagery pulled from the Z:\VISR share for review. Large
+# originals, not published; pick from here, then run the asset pipeline.
+_candidates/

@@ -90,17 +90,10 @@ a:hover { color: var(--gold-deep); }
 /* ---- Layout ---- */
 .wrap { max-width: var(--max); margin-inline: auto;
   padding-inline: var(--s5); }
-section { padding-block: var(--s9); }
+section { padding-block: var(--s7); }
 section + section { border-top: 1px solid var(--rule); }
 .rule { border: 0; border-top: 1px solid var(--rule); margin-block: var(--s7); }
 
-/* Page lead-in. On every page but the home page, the first section holds
-   only the <h1> and a short intro, so a full var(--s9) band above and below
-   it left a large empty gap under the header and an even larger one before
-   the first real section. The home page is untouched: its first child is
-   the wordmark band, not a <section>. */
-main > section:first-child { padding-block: var(--s7); }
-main > section:first-child + section { padding-top: var(--s7); }
 /* The reset zeroes every heading margin, which left the page title sitting
    flush on top of its own intro paragraph. h1 is large enough that it needs
    a little air; h2 and below already read fine without it. */
@@ -154,7 +147,7 @@ h1 + .prose { margin-top: var(--s4); }
 .logo-band img { width: 320px; margin-inline: auto; }
 
 /* ---- Hero ---- */
-.hero { padding-block: var(--s7) var(--s9); }
+.hero { padding-block: var(--s7) var(--s8); }
 .hero h1 { font-size: clamp(1.75rem, 3vw, 2.25rem); max-width: 26ch; }
 .hero p { margin-top: var(--s5); max-width: var(--measure);
   font-size: 1.125rem; color: var(--ink-muted); }
@@ -218,6 +211,26 @@ h1 + .prose { margin-top: var(--s4); }
   padding-block: var(--s5); }
 .titled-list h3 { margin-bottom: var(--s2); }
 .titled-list p { color: var(--ink-muted); max-width: var(--measure); }
+/* An entry with a photo puts the photo beside its own text instead of
+   stranding it in a section of its own further down the page. All three
+   equipment photos are 3:4, so a fixed column width gives them matching
+   heights without cropping. */
+.titled-list li.has-figure { display: grid; align-items: start;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 200px);
+  /* The photo spans both rows and is taller than the text. Without an
+     explicit `1fr` second row, its extra height is shared out between the
+     rows and pushes the paragraph away from its own heading. */
+  grid-template-rows: auto 1fr;
+  column-gap: var(--s7); }
+.titled-list li.has-figure > h3,
+.titled-list li.has-figure > p { grid-column: 1; }
+.titled-list li.has-figure > picture { grid-column: 2; grid-row: 1 / span 2; }
+.titled-list li.has-figure img { width: 100%; }
+@media (max-width: 700px) {
+  .titled-list li.has-figure { grid-template-columns: 1fr; row-gap: var(--s4); }
+  .titled-list li.has-figure > picture { grid-column: 1; grid-row: auto; }
+  .titled-list li.has-figure img { max-width: 320px; }
+}
 
 /* ---- Footer ---- */
 .site-footer { border-top: 1px solid var(--rule); background: var(--bg-subtle);

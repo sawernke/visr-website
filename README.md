@@ -124,11 +124,17 @@ A few conventions worth knowing:
   drift. If you add a nav item, remember to add it to all eleven copies,
   including `tools/page-template.html`, and to set `aria-current` on the
   page it targets.
-- The first `<section>` inside `<main>` is the page lead-in: an `<h1>` and a
-  short intro. It gets tighter `padding-block` than the sections after it
-  (see `main > section:first-child` in `site.css`), so the page title sits
-  close under the header instead of below a large empty band. The home page
-  is unaffected — its first child is the wordmark band, not a `<section>`.
+- Vertical rhythm is one value: `section { padding-block: var(--s7) }`, so
+  every section has 48px above and below it and neighbours sit 96px apart.
+  Change that one declaration and the whole site moves together. `h1 +
+  .prose` adds a 16px gap under a page title, because the reset zeroes every
+  heading margin and an `<h1>` is large enough to need it.
+- An entry in a `.titled-list` can carry a photo beside its own text: give
+  the `<li>` `class="has-figure"` and put a `<picture>` inside it, after the
+  `<p>`. The rules in `site.css` put the text left and the photo right in a
+  200px column, and stack them on a phone. The Geophysical Survey page uses
+  this for its three instrument photos. Don't put `class="img-portrait"` on
+  those images — that class centres a standalone image and fights the grid.
 
 ## The nav duplication warning (read this before touching the header or footer)
 
