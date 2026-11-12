@@ -18,7 +18,6 @@
   --s6: 32px; --s7: 48px; --s8: 64px; --s9: 96px; --s10: 128px;
 
   --max: 1100px;
-  --measure: 68ch;
 }
 
 /* ---- Fonts ---- */
@@ -80,7 +79,7 @@ a:hover { color: var(--gold-deep); }
 .eyebrow { font-size: .75rem; font-weight: 600; text-transform: uppercase;
   letter-spacing: .12em; color: var(--gold-deep); margin-bottom: var(--s3); }
 
-.prose { max-width: var(--measure); }
+.prose { max-width: none; }
 .prose p + p { margin-top: var(--s4); }
 
 .arrow-link { font-weight: 500; text-decoration: none;
@@ -158,12 +157,10 @@ section > * + h3 { margin-top: var(--s5); }
 
 /* ---- Hero ---- */
 .hero { padding-block: var(--s7) var(--s8); }
-.hero h1 { font-size: clamp(1.75rem, 3vw, 2.25rem); max-width: 26ch; }
-.hero p { margin-top: var(--s5); max-width: var(--measure);
+.hero h1 { font-size: clamp(1.75rem, 3vw, 2.25rem); }
+.hero p { margin-top: var(--s5);
   font-size: 1.125rem; color: var(--ink-muted); }
 .hero img { margin-top: var(--s7); width: 100%; }
-/* Home page: text spans the full content width, matching the hero photo */
-.home .hero h1, .home .hero p, .home .prose { max-width: none; }
 
 /* ---- Image band (full-width band for non-hero letterbox images) ---- */
 .img-band { width: 100%; }
@@ -222,7 +219,7 @@ section > * + h3 { margin-top: var(--s5); }
 .titled-list > li { border-top: 1px solid var(--rule);
   padding-block: var(--s5); }
 .titled-list h3 { margin-bottom: var(--s2); }
-.titled-list p { color: var(--ink-muted); max-width: var(--measure); }
+.titled-list p { color: var(--ink-muted); }
 /* An entry with a photo puts the photo beside its own text instead of
    stranding it in a section of its own further down the page. All three
    equipment photos are 3:4, so a fixed column width gives them matching
