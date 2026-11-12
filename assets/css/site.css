@@ -162,6 +162,8 @@ section > * + h3 { margin-top: var(--s5); }
 .hero p { margin-top: var(--s5); max-width: var(--measure);
   font-size: 1.125rem; color: var(--ink-muted); }
 .hero img { margin-top: var(--s7); width: 100%; }
+/* Home page: text spans the full content width, matching the hero photo */
+.home .hero h1, .home .hero p, .home .prose { max-width: none; }
 
 /* ---- Image band (full-width band for non-hero letterbox images) ---- */
 .img-band { width: 100%; }
